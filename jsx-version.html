@@ -8,10 +8,19 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin></script>
+    <script>
+        Babel.registerPresets({
+            "react-classic": () => ({
+                presets: [
+                    [Babel.availablePresets["react"], { runtime: "classic" }]
+                ],
+            }),
+        });
+    </script>
 </head>
 <body>
     <div id="root"></div>
-    <script type="text/babel" data-type="module">
+    <script type="text/babel" data-presets="react-classic">
         // Components can be used INSIDE other components — this is called "composition"
         // This Button component is small, but it keeps button styling/logic in one place
         // "variant" defaults to "secondary" if not provided — this is called a default parameter
@@ -57,9 +66,12 @@
                 title: 'Hobby',
                 price: 'Free',
                 includesText: 'Includes:',
-                features: ['No credit card required', 'Limited Agent requests', 'Limited Tab completions'],
-                buttonText: 'Download',
-                buttonVariant: 'secondary',
+                features: [
+                    'No credit card required',
+                    'Limited Agent requests',
+                    'Limited Tab completions'],
+                buttonText: 'Start for free',
+                buttonVariant: 'terciary',
             };
             const proPlan = {
                 title: 'Pro',
@@ -72,6 +84,20 @@
                     'Maximum context windows',
                 ],
                 buttonText: 'Get Pro',
+                buttonVariant: 'secondary',
+            };
+
+            const enterprisePlan = {
+                title: 'Enterprise',
+                price: 'Custom',
+                includesText: 'Everything in Pro, plus:',
+                features: [
+                    'SSO and domain capture',
+                    'Admin controls and usage analytics',
+                    'Priority support and SLA',
+                    'Custom invoicing and contracts',
+                ],
+                buttonText: 'Contact sales',
                 buttonVariant: 'primary',
             };
 
@@ -84,6 +110,7 @@
                         {/* This is the same as writing: title="Hobby" price="Free" includesText="Includes:" etc. */}
                         <PricingCard {...hobbyPlan} />
                         <PricingCard {...proPlan} />
+                        <PricingCard {...enterprisePlan} />
                     </div>
                 </>
             );
