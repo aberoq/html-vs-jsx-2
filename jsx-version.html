@@ -8,13 +8,22 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin></script>
+    <script>
+        Babel.registerPresets({
+            "react-classic": () => ({
+                presets: [
+                    [Babel.availablePresets["react"], { runtime: "classic" }]
+                ],
+            }),
+        });
+    </script>
 </head>
 <body>
     <div id="root"></div>
-    <script type="text/babel" data-type="module">
+    <script type="text/babel" data-presets="react-classic">
         // Components can be used INSIDE other components — this is called "composition"
         // This Button component is small, but it keeps button styling/logic in one place
-        // "variant" defaults to "secondary" if not provided — this is called a default parameter
+        // "variant" defaults to "secondary" if not provided — options: secondary, primary, terciary
         function Button({ label, variant = "secondary" }) {
             return (
                 // Template literal (``) lets us build a className string with the variant value
@@ -24,13 +33,16 @@
 
         // Same card UI, written as a JSX component (HTML-like syntax inside JavaScript)
         // This component is reusable - we can create multiple cards by passing different data
-        function PricingCard({ title, price, includesText, features, buttonText, buttonVariant }) {
+        function PricingCard({ title, price, pricePeriod, includesText, features, buttonText, buttonVariant }) {
             return (
                 // JSX uses "className" instead of "class" because "class" is a reserved word in JavaScript
                 <div className="card">
                     {/* Curly braces { } let you insert JavaScript expressions into JSX */}
                     <h1 className="card-title">{title}</h1>
-                    <p className="card-price">{price}</p>
+                    <p className="card-price">
+                        <span className="card-price-amount">{price}</span>
+                        {pricePeriod && <span className="card-price-period">{pricePeriod}</span>}
+                    </p>
                     <div className="card-content">
                         <p className="includes-text">{includesText}</p>
                         <ul className="features-list">
@@ -56,14 +68,20 @@
             const hobbyPlan = {
                 title: 'Hobby',
                 price: 'Free',
+                pricePeriod: null,
                 includesText: 'Includes:',
-                features: ['No credit card required', 'Limited Agent requests', 'Limited Tab completions'],
-                buttonText: 'Download',
-                buttonVariant: 'secondary',
+                features: [
+                    'No credit card required',
+                    'Limited Agent requests',
+                    'Limited Tab completions',
+                ],
+                buttonText: 'Start for free',
+                buttonVariant: 'terciary',
             };
             const proPlan = {
                 title: 'Pro',
-                price: '$20/mo.',
+                price: '$20',
+                pricePeriod: '/mo.',
                 includesText: 'Everything in Hobby, plus:',
                 features: [
                     'Extended limits on Agent',
@@ -72,6 +90,20 @@
                     'Maximum context windows',
                 ],
                 buttonText: 'Get Pro',
+                buttonVariant: 'secondary',
+            };
+            const enterprisePlan = {
+                title: 'Enterprise',
+                price: 'Custom',
+                pricePeriod: null,
+                includesText: 'Everything in Pro, plus:',
+                features: [
+                    'SSO and domain capture',
+                    'Admin controls and usage analytics',
+                    'Priority support and SLA',
+                    'Custom invoicing and contracts',
+                ],
+                buttonText: 'Contact sales',
                 buttonVariant: 'primary',
             };
 
@@ -84,6 +116,7 @@
                         {/* This is the same as writing: title="Hobby" price="Free" includesText="Includes:" etc. */}
                         <PricingCard {...hobbyPlan} />
                         <PricingCard {...proPlan} />
+                        <PricingCard {...enterprisePlan} />
                     </div>
                 </>
             );

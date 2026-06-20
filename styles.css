@@ -154,6 +154,17 @@ body {
     background-color: #333;
 }
 
+/* Terciary variant — transparent with border (outlined style) */
+.download-button.terciary {
+    background-color: transparent;
+    border: 1px solid #a5a4a1;
+    color: #333;
+}
+
+.download-button.terciary:hover {
+    background-color: #d1d0cc;
+}
+
 /* --- Dev label --- */
 /* Fixed badge at top center — identifies this page as the HTML version */
 .page-label {
